@@ -145,7 +145,22 @@ int main(int argc, char** argv) {
                     auto y = output.at<float>(i, 1) * frame.rows;
                     auto width = output.at<float>(i, 2) * frame.cols;
                     auto height = output.at<float>(i, 3) * frame.rows;
-                    cv::Rect rect(x - width / 2, y - height / 2, width, height);
+                    float l, t;
+                    int r_minus_l = width;
+                    int b_minus_t = height;
+                    l = x - width / 2;
+                    t = y - height / 2;
+
+                    if(l <0 )
+                        l = 0;
+                    if(t < 0 )
+                        t = 0;
+                    if(r_minus_l < 0 )
+                        r_minus_l = 0;
+                    if(b_minus_t < 0 )
+                        b_minus_t = 0;
+                    //cv::Rect rect(x - width / 2, y - height / 2, width, height);
+                    cv::Rect rect(l, t, r_minus_l, b_minus_t);
 
                     for (int c = 0; c < NUM_CLASSES; c++) {
                         auto confidence = *output.ptr<float>(i, 5 + c);
